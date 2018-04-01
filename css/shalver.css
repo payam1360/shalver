@@ -1,0 +1,10 @@
+.Header {
+    color: coral;
+    border-style: solid;
+    border-width: 0 0 5px 0;
+    font-family: Petit Formal Script;
+    font-size: 18pt;
+    text-align: center;
+    width: 80%;
+    margin: auto;
+}
