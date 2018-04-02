@@ -8,3 +8,23 @@
     width: 80%;
     margin: auto;
 }
+
+.First-row {
+    display: flex;
+}
+.Measurements {
+    margin-top: 10px;
+    flex: 1;
+}
+
+.Measurements label {
+    font-family: Petit Formal Script; 
+}
+
+.Measurements input.text {
+    width: 80px;
+}
+
+.Measurements input.range {
+    width: 200px;
+}
