@@ -9,12 +9,12 @@
     margin: auto;
 }
 
-.First-row {
+.row {
     display: flex;
 }
 .Measurements {
-    margin-top: 10px;
-    flex: 1;
+    margin-top: 30px;
+    flex: 1
 }
 
 .Measurements label {
@@ -28,3 +28,20 @@
 .Measurements input.range {
     width: 200px;
 }
+
+.Measurements input.range::-moz-range-track {
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+
+.Measurements input.range::-moz-range-thumb {
+    background: #ddd;
+    border: 2px solid coral;
+    border-radius: 50%;
+}
+
+.Measurements input.range::-moz-range-progress {
+    background: coral;
+}
+
