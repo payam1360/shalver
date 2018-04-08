@@ -8,13 +8,16 @@
     width: 80%;
     margin: auto;
 }
-
-.row {
+.flex-container {
     display: flex;
+    justify-content: space-around;
+    width: 80%;
+    margin: 0 auto;
 }
+
 .Measurements {
+    flex: 1;
     margin-top: 30px;
-    flex: 1
 }
 
 .Measurements label {
@@ -45,3 +48,12 @@
     background: coral;
 }
 
+.Button {
+    border: 2px solid coral;
+    border-radius: 12px;
+    background-color: white;
+    color: coral;
+    padding: 15px 32px;
+    font-family: Petit Formal Script;
+    cursor: pointer;
+}

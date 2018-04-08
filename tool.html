@@ -10,57 +10,79 @@
   <div class="Header">
     <h1> Shalver </h1>
   </div>
-  
-  <div class="row">
-  <form class="Measurements" >
+
+<div class="flex-container">
+<!-- One block of measurement -->
+  <div class="Measurements">
     <label for="name" >Waist</label>
-    <input type="text" placeholder="32&quot" class="text">
-    <input type="range" class="range">
-  </form> 
-  <form class="Measurements" >
+    <form>
+      <input type="text" placeholder="32&quot" class="text">
+      <input type="range" class="range">
+    </form>
+  </div>
+  <!-------------------------------->
+<!-- One block of measurement -->
+  <div class="Measurements">
     <label for="name" >Thigh</label>
-    <input type="text" placeholder="15&quot" class="text">
-    <input type="range" class="range">
-  </form>
+    <form>
+      <input type="text" placeholder="32&quot" class="text">
+      <input type="range" class="range">
+    </form>
   </div>
+</div>
+  <!-------------------------------->
+</div>
 
-  <div class="row">
-  <form class="Measurements" >
+<div class="flex-container">
+<!-- One block of measurement -->
+  <div class="Measurements">
     <label for="name" >Inseam</label>
-    <input type="text" placeholder="28&quot" class="text">
-    <input type="range" class="range">
-  </form> 
-  <form class="Measurements" >
-    <label for="name" >Outseam</label>
-    <input type="text" placeholder="34&quot" class="text">
-    <input type="range" class="range">
-  </form>
+    <form>
+      <input type="text" placeholder="32&quot" class="text">
+      <input type="range" class="range">
+    </form>
   </div>
+  <!-------------------------------->
+<!-- One block of measurement -->
+  <div class="Measurements">
+    <label for="name" >Outseam</label>
+    <form>
+      <input type="text" placeholder="32&quot" class="text">
+      <input type="range" class="range">
+    </form>
+  </div>
+  <!-------------------------------->
+</div>
 
-  <div class="row">
-  <form class="Measurements" >
+<div class="flex-container">
+  <div class="Measurements">
     <label for="name" >Price</label>
-    <input list="pricemin" class="text" placeholder="No min">
-  <datalist id="pricemin">
-    <option value="10$">
-    <option value="20$">
-    <option value="40$">
-    <option value="60$">
-    <option value="100$">
-  </datalist>
-    <input list="pricemax" class="text" placeholder="No max">
-  <datalist id="pricemax">
-    <option value="50$">
-    <option value="80$">
-    <option value="120$">
-    <option value="180$">
-    <option value="220$+">
-  </datalist>
-  </form> 
+      <form>
+	<input list="pricemin" class="text" placeholder="No min">
+	<datalist id="pricemin">
+	  <option value="10$">
+	  <option value="20$">
+	  <option value="40$">
+	  <option value="60$">
+	  <option value="100$">
+	</datalist>
+	<input list="pricemax" class="text" placeholder="No max">
+	<datalist id="pricemax">
+	  <option value="50$">
+	  <option value="80$">
+	  <option value="120$">
+	  <option value="180$">
+	  <option value="220$+">
+	</datalist>
+      </form>
   </div>  
+</div>
 
-
-  
+<div style="text-align:center;">
+  <form>
+    <input type="button" value="submit" class="Button">
+  </form>
+</div>
 
 </body>
 </html>
