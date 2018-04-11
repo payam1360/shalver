@@ -7,7 +7,7 @@
 function setrange2textbox (slider_number) {
 
     var sliderval = document.getElementsByClassName("range");
-    var outputval = document.getElementsByClassName("text");
+    var outputval = document.getElementsByClassName("measurement-text");
     outputval[slider_number].value = sliderval[slider_number].value;
 }
 
@@ -15,7 +15,7 @@ function settextbox2range (textbox_number) {
 
     var timeout   = null;
     var sliderval = document.getElementsByClassName("range");
-    var inputval  = document.getElementsByClassName("text");
+    var inputval  = document.getElementsByClassName("measurement-text");
     timeout       = setTimeout(function() {checkuserinput(inputval, textbox_number);}, 2000);
 }
 

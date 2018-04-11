@@ -14,12 +14,30 @@
     <h1> Shalver </h1>
   </div>
 
+  <div class="flex-container">
+     <div class="navigation-bar">
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="guide.html">Guide</a></li>
+      <li><a href="tool.html">Tool</a></li>
+    </ul>
+</div>
+    <div class="navigation-bar">
+      <form>
+	<input class="signuptext" placeholder="first name">
+	<input class="signuptext" placeholder="email">
+	<input type="button" value="sign up" class="signupButton">
+      </form>
+    </div>
+  </div>
+   
+  
 <div class="flex-container">
 <!-- One block of measurement -->
   <div class="Measurements">
     <label for="name" >Waist</label>
     <form>
-      <input type="text" placeholder="35&quot" class="text" oninput="settextbox2range(0)">
+      <input type="text" placeholder="35&quot" class="measurement-text" oninput="settextbox2range(0)">
       <input type="range" min="24" max="46" step="0.1" class="range" oninput="setrange2textbox(0)">
     </form>
   </div>
@@ -28,7 +46,7 @@
   <div class="Measurements">
     <label for="name" >Thigh</label>
     <form>
-      <input type="text" placeholder="15&quot" class="text" oninput="settextbox2range(1)">
+      <input type="text" placeholder="15&quot" class="measurement-text" oninput="settextbox2range(1)">
       <input type="range" min="10" max="20" step="0.1" class="range" oninput="setrange2textbox(1)">
     </form>
   </div>
@@ -41,7 +59,7 @@
   <div class="Measurements">
     <label for="name" >Inseam</label>
     <form>
-      <input type="text" placeholder="32&quot" class="text" oninput="settextbox2range(2)">
+      <input type="text" placeholder="32&quot" class="measurement-text" oninput="settextbox2range(2)">
       <input type="range" min="26" max="38" step="0.1" class="range" oninput="setrange2textbox(2)">
     </form>
   </div>
@@ -50,7 +68,7 @@
   <div class="Measurements">
     <label for="name" >Outseam</label>
     <form>
-      <input type="text" placeholder="36&quot" class="text" oninput="settextbox2range(3)">
+      <input type="text" placeholder="36&quot" class="measurement-text" oninput="settextbox2range(3)">
       <input type="range" min="30" max="42" step="0.1" class="range" oninput="setrange2textbox(3)">
     </form>
   </div>
@@ -61,7 +79,7 @@
   <div class="Measurements">
     <label for="name" >Price</label>
       <form>
-	<input list="pricemin" class="text" placeholder="No min">
+	<input list="pricemin" class="measurement-text" placeholder="No min">
 	<datalist id="pricemin">
 	  <option value="10$">
 	  <option value="20$">
@@ -69,7 +87,7 @@
 	  <option value="60$">
 	  <option value="100$">
 	</datalist>
-	<input list="pricemax" class="text" placeholder="No max">
+	<input list="pricemax" class="measurement-text" placeholder="No max">
 	<datalist id="pricemax">
 	  <option value="50$">
 	  <option value="80$">

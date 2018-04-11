@@ -8,12 +8,40 @@
     width: 80%;
     margin: auto;
 }
+
+li {
+    display: inline;
+    font-family: Petit Formal Script;
+    padding: 10px;
+}
+
+li a {
+    color: coral;
+}
+
+
 .flex-container {
     display: flex;
     justify-content: space-around;
     width: 80%;
     margin: 0 auto;
 }
+
+.navigation-bar {
+    flex: 1;
+    background-color: #ddd;
+}
+
+.navigation-bar input.signuptext {
+    width: 150px;
+    height: 25px;
+    margin-top: 12px;
+    border: 1px solid grey ;
+    border-radius: 3px;
+    padding-left: 5px;
+		    
+}
+
 
 .Measurements {
     flex: 1;
@@ -24,8 +52,13 @@
     font-family: Petit Formal Script; 
 }
 
-.Measurements input.text {
+.Measurements input.measurement-text {
     width: 80px;
+    height: 25px;
+    margin-top: 0px;
+    padding-left: 5px;
+    border: 1px solid grey ;
+    border-radius: 3px;
 }
 
 .Measurements input.range {
@@ -54,6 +87,17 @@
     background-color: white;
     color: coral;
     padding: 10px 25px;
+    font-family: Petit Formal Script;
+    cursor: pointer;
+}
+
+.signupButton {
+    border: 1px solid coral;
+    border-radius: 5px;
+    background-color: white;
+    color: coral;
+    width: 100px;
+    height: 30px;
     font-family: Petit Formal Script;
     cursor: pointer;
 }
