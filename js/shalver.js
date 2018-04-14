@@ -34,3 +34,15 @@ function checkuserinput (inputval, textbox_number) {
     
 }
 
+
+function clearforms() {
+
+    var sliderval = document.getElementsByClassName("range");
+    var inputval  = document.getElementsByClassName("measurement-text");
+    for(var kk = 0; kk < inputval.length; kk++) {
+	inputval[kk].value = "";
+    }
+    for(var kk = 0; kk < sliderval.length; kk++) {
+	sliderval[kk].value = sliderval[kk].placeholder;
+    }
+}

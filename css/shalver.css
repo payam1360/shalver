@@ -81,12 +81,13 @@ li a {
     background: coral;
 }
 
-.Button {
+.clearButton, .submitButton{
     border: 2px solid coral;
     border-radius: 12px;
     background-color: white;
     color: coral;
     padding: 10px 25px;
+    margin-top: 30px;
     font-family: Petit Formal Script;
     cursor: pointer;
 }
