@@ -70,7 +70,7 @@ function submitlogin() {
             document.getElementById("txtName").innerHTML =
 		document.getElementById("txtName").innerHTML +
 		". Let's get started :)";
-	    console.log(JSON.parse(this.responseText));
+	    console.log(this);
         }
     };    
     xmlhttp.open("POST", "php/SaveUserCredentials.php", true);
