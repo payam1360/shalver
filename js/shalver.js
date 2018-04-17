@@ -46,3 +46,36 @@ function clearforms() {
 	sliderval[kk].value = sliderval[kk].placeholder;
     }
 }
+
+function submitlogin() {
+
+
+
+    var inputval  = document.getElementsByClassName("signuptext");
+    if(inputval[0].value == "" || inputval[1].value == "") {
+	return;
+    } else {
+	var username  = inputval[0].value;
+	var useremail = inputval[1].value;
+	inputval[0].value = "";
+	inputval[1].value = "";
+    }
+
+    document.getElementById("askforsignup").innerHTML = "";
+    document.getElementById("txtName").innerHTML = "Hi " + username;
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("txtName").innerHTML =
+		document.getElementById("txtName").innerHTML +
+		". Let's get started :)";
+	    console.log(JSON.parse(this.responseText));
+        }
+    };    
+    xmlhttp.open("POST", "php/SaveUserCredentials.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("username="+username+"&useremail="+useremail);
+
+    
+}
