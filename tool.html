@@ -38,6 +38,16 @@
       <div class="signuptextstyle" id="txtName"></div>
   </div>
 
+  <div class="flex-container">
+    <div class="signuptextstyle">
+      <label for="name" >Choose your fit:</label>
+  <form>
+    <input type="radio" name="fittype" value="skinny" class="radioButton"> Skinny
+    <input type="radio" name="fittype" value="normal" class="radioButton"> Normal
+    <input type="radio" name="fittype" value="loose" class="radioButton"> Loose  
+  </form>
+    </div>
+  </div>
   
 <div class="flex-container">
 <!-- One block of measurement -->
@@ -108,7 +118,7 @@
 
 <div style="text-align:center;">
   <form>
-    <input type="button" value="submit" class="submitButton">
+    <input type="button" value="submit" class="submitButton" onclick="submituserdata()">
     <input type="button" value="clear"  class="clearButton" onclick="clearforms()">    
   </form>
 </div>

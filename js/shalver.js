@@ -4,6 +4,9 @@
 // Copyright Shalver,
 // written April 10, 2018
 
+var USERNAME_GLOBAL;
+var USEREMAIL_GLOBAL;
+
 function setrange2textbox (slider_number) {
 
     var sliderval = document.getElementsByClassName("range");
@@ -39,11 +42,17 @@ function clearforms() {
 
     var sliderval = document.getElementsByClassName("range");
     var inputval  = document.getElementsByClassName("measurement-text");
+    var radioval  = document.getElementsByClassName("radioButton");
+    
+    
     for(var kk = 0; kk < inputval.length; kk++) {
 	inputval[kk].value = "";
     }
     for(var kk = 0; kk < sliderval.length; kk++) {
 	sliderval[kk].value = sliderval[kk].placeholder;
+    }
+    for(var kk = 0; kk < radioval.length; kk++) {
+	radioval[kk].checked = false;
     }
 }
 
@@ -55,14 +64,14 @@ function submitlogin() {
     if(inputval[0].value == "" || inputval[1].value == "") {
 	return;
     } else {
-	var username  = inputval[0].value;
-	var useremail = inputval[1].value;
+	USERNAME_GLOBAL   = inputval[0].value;
+	USEREMAIL_GLOBAL  = inputval[1].value;
 	inputval[0].value = "";
 	inputval[1].value = "";
     }
 
     document.getElementById("askforsignup").innerHTML = "";
-    document.getElementById("txtName").innerHTML = "Hi " + username;
+    document.getElementById("txtName").innerHTML = "Hi " + USERNAME_GLOBAL;
 
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
@@ -70,12 +79,30 @@ function submitlogin() {
             document.getElementById("txtName").innerHTML =
 		document.getElementById("txtName").innerHTML +
 		". Let's get started :)";
-	    console.log(this);
         }
     };    
     xmlhttp.open("POST", "php/SaveUserCredentials.php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send("username="+username+"&useremail="+useremail);
+    xmlhttp.send("username="+USERNAME_GLOBAL+"&useremail="+USEREMAIL_GLOBAL);
 
-    
+}
+
+function submituserdata() {
+
+    var inputval  = document.getElementsByClassName("measurement-text");
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+	    console.log(this);
+        }
+    };
+
+    // sending the request
+    xmlhttp.open("POST", "php/main.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var userdata = "userwaist="+inputval[0].value+"&userthigh="+inputval[1].value+
+	"&userinseam="+inputval[2].value+"&useroutseam="+inputval[3].value
+	+"&username="+USERNAME_GLOBAL+"&useremail="+USEREMAIL_GLOBAL;
+    xmlhttp.send(userdata);
+
 }
