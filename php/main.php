@@ -61,7 +61,12 @@ $username       = $_POST["username"];
 $useremail      = $_POST["useremail"];
 
 $dbflag = saveinfointoDB($userwaist, $userthigh, $userinseam, $useroutseam, $username, $useremail);
-
+if($dbflag == false)
+    {
+        echo "user has not registered."
+    }else{
+        echo "user data is saved."
+    }
 
 
 
