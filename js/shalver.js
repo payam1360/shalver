@@ -87,9 +87,21 @@ function submitlogin() {
 
 }
 
+function returnstyle() {
+    var styleval  = document.getElementsByClassName("radioButton");
+    for(var kk = 0; kk < styleval.length; kk++) {
+	if(styleval[kk].checked == true) {
+	    var style = styleval[kk].value;
+	}
+    }
+    return style;
+}
+
 function submituserdata() {
 
     var inputval  = document.getElementsByClassName("measurement-text");
+    var style     = returnstyle();
+    
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -102,7 +114,8 @@ function submituserdata() {
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     var userdata = "userwaist="+inputval[0].value+"&userthigh="+inputval[1].value+
 	"&userinseam="+inputval[2].value+"&useroutseam="+inputval[3].value
-	+"&username="+USERNAME_GLOBAL+"&useremail="+USEREMAIL_GLOBAL;
+	+"&username="+USERNAME_GLOBAL+"&useremail="+USEREMAIL_GLOBAL+
+	"&userstyle="+style;
     xmlhttp.send(userdata);
 
 }
