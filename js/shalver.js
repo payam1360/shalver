@@ -112,10 +112,12 @@ function submituserdata() {
     // sending the request
     xmlhttp.open("POST", "php/main.php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    
     var userdata = "userwaist="+inputval[0].value+"&userthigh="+inputval[1].value+
 	"&userinseam="+inputval[2].value+"&useroutseam="+inputval[3].value
 	+"&username="+USERNAME_GLOBAL+"&useremail="+USEREMAIL_GLOBAL+
-	"&userstyle="+style;
+	"&userstyle="+style+"&pricemin="+inputval[4].value+"&pricemax="+inputval[5].value;
+    
     xmlhttp.send(userdata);
 
 }
