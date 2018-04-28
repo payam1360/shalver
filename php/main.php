@@ -8,7 +8,7 @@ define("LEG_OPEN",5);
 define("RISE",    6);
 define("MAX_ERROR", 1000);
 define("NUM_BEST_FIT", 4);
-
+define("DBG", false); 
 
 class user {
     
@@ -103,19 +103,22 @@ function saveusermeasurementintoDB($userwaist, $userthigh, $userinseam, $userout
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        echo "Connected successfully";
+        if(DBG) {
+            echo "Connected successfully";
+        }
         
         $sql = "UPDATE " . $table1name .
             " SET waist = " . $userwaist . ", thigh = " . $userthigh .
             ", inseam = ". $userinseam . ", outseam = ".  $useroutseam . 
             " WHERE username = '" . $username .
             "' AND email = '" . $useremail . "';";
-
-        echo $sql;
-
-        if ($conn->query($sql) === TRUE) {
+        if(DBG) {
+            echo $sql;
+        }
+        
+        if ($conn->query($sql) === TRUE and DBG) {
             echo "New record created successfully";
-        } else {
+        } elseif(DBG) {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
         $conn->close();
@@ -174,16 +177,17 @@ function fetchdata() {
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        echo "Connected successfully";
-        
+        if(DBG) {
+            echo "Connected successfully";
+        }
         $sql = "SELECT * FROM " . $tablename ;
 
         $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
+        if ($result->num_rows > 0 and DBG) {
             // output data of each row
             echo "data retrieved successfully";
-        } else {
+        } elseif(DBG) {
             echo "0 results";
         }
 
@@ -239,6 +243,82 @@ function solveLS($Alldata, $user_info, $userpricemin, $userpricemax, $numOutput)
 }
 
 
+function calculateFigureofMerit($Alldata, $user_info){
+
+    // defining the weights\
+    $w_waist     = 0.25;
+    $w_thigh     = 0.15;
+    $w_inseam    = 0.25;
+    $w_outseam   = 0.05;
+    $w_leg_open  = 0.10;
+    $w_hip       = 0.15;
+    $w_rise      = 0.05;
+    
+    $waist     = array_column($Alldata, "waist");
+    $thigh     = array_column($Alldata, "thigh");
+    $inseam    = array_column($Alldata, "inseam");
+    $outseam   = array_column($Alldata, "outseam");
+    $leg_open  = array_column($Alldata, "leg_open");
+    $hip       = array_column($Alldata, "hip");
+    $rise      = array_column($Alldata, "rise");
+    $M         = count($waist);
+    $figureofmerit = array();
+    for($kk = 0; $kk < $M; $kk++) {
+
+        $figureofmerit[$kk] = $waist[$kk]    * $w_waist    +
+                              $thigh[$kk]    * $w_thigh    +
+                              $inseam[$kk]   * $w_inseam   + 
+                              $outseam[$kk]  * $w_outseam  +
+                              $leg_open[$kk] * $w_leg_open +
+                              $hip[$kk]      * $w_hip      +
+                              $rise[$kk]     * $w_rise;
+
+    }
+
+    // calculating the user figure of merit as well:
+    $userfigureofmerit =  $w_waist    * $user_info->get_member(WAIST    ) +
+                          $w_thigh    * $user_info->get_member(THIGH    ) +
+                          $w_inseam   * $user_info->get_member(INSEAM   ) +
+                          $w_outseam  * $user_info->get_member(OUTSEAM  ) +
+                          $w_leg_open * $user_info->get_member(LEG_OPEN ) +
+                          $w_hip      * $user_info->get_member(HIP      ) +
+                          $w_rise     * $user_info->get_member(RISE     ) ;
+
+    // appending at the end of the merit vector
+    $figureofmerit[$M] = $userfigureofmerit;
+
+    
+    return $figureofmerit;
+
+}
+
+
+function CreateBlob4Js($Alldata, $figureMerit, $bestfit_idx) {
+
+    $Blob   = array();
+    $M      = count($figureMerit);
+    $price  = array_column($Alldata, "price");
+    $brand  = array_column($Alldata, "brand");    
+    $link   = array_column($Alldata, "web_link");
+
+    for($kk = 0; $kk < $M - 1; $kk++) {
+        if($kk == $bestfit_idx) {
+            $isbest = true;
+        }else{
+            $isbest = false;
+        }
+        $Blob[$kk] = array("price"   => $price[$kk],
+                           "merit"   => $figureMerit[$kk],
+                           "brand"   => $brand[$kk],
+                           "bestfit" => $isbest,
+                           "link"    => $link[$kk] );
+    }
+
+
+
+    return $Blob;
+}
+
 
 
 /// -------------------------
@@ -257,18 +337,20 @@ $userpricemin   = $_POST["pricemin"];
 
 
 $dbflag = saveusermeasurementintoDB($userwaist, $userthigh, $userinseam, $useroutseam, $username, $useremail);
-if($dbflag == false) {
+
+if($dbflag == false and DBG) {
     echo "user has not registered. no data is saved";
-}else{
-    echo "user data is saved.";
+}elseif(DBG){
+    echo "user data is saved.\n";
 }
 
 $user_info   = new user;
 $user_info   = estimatealluserparams($userwaist, $userthigh, $userinseam, $useroutseam, $userstyle);
 $Alldata     = fetchdata();
 $bestfit_idx = solveLS($Alldata, $user_info, $userpricemin, $userpricemax, NUM_BEST_FIT); 
-
-
+$figureMerit = calculateFigureofMerit($Alldata, $user_info);
+$DataBlob    = CreateBlob4Js($Alldata, $figureMerit, $bestfit_idx);
+echo json_encode($DataBlob);
 
 
 ?> 
