@@ -233,6 +233,7 @@ function solveLS($Alldata, $user_info, $userpricemin, $userpricemax, $numOutput)
                 $error = $LS;
                 $index[$count % $numOutput] = $kk;
                 $count++;
+                
             }
         }
         
@@ -293,29 +294,37 @@ function calculateFigureofMerit($Alldata, $user_info){
 }
 
 
-function CreateBlob4Js($Alldata, $figureMerit, $bestfit_idx) {
+function CreateBlob4Js($Alldata, $figureMerit, $bestfit_idx, $userpricemax, $userpricemin, $username) {
 
     $Blob   = array();
     $M      = count($figureMerit);
+    $N      = count($bestfit_idx);
     $price  = array_column($Alldata, "price");
     $brand  = array_column($Alldata, "brand");    
     $link   = array_column($Alldata, "web_link");
 
     for($kk = 0; $kk < $M - 1; $kk++) {
-        if($kk == $bestfit_idx) {
-            $isbest = true;
-        }else{
-            $isbest = false;
+        $isbest = false;
+        for($kx = 0; $kx < $N; $kx++) {
+            if($kk == $bestfit_idx[$kx]) {
+                $isbest = true;
+                break;
+            }
         }
-        $Blob[$kk] = array("price"   => $price[$kk],
+        $Blob[$kk] = array("price"   => (float)$price[$kk],
                            "merit"   => $figureMerit[$kk],
                            "brand"   => $brand[$kk],
                            "bestfit" => $isbest,
                            "link"    => $link[$kk] );
     }
 
-
-
+    $userprice = ($userpricemax + $userpricemin) / 2;
+    $Blob[$M - 1] = array("price"   => $userprice,
+                          "merit"   => $figureMerit[$M-1],
+                          "brand"   => $username,
+                          "bestfit" => true,
+                          "link"    => "");
+    
     return $Blob;
 }
 
@@ -347,9 +356,9 @@ if($dbflag == false and DBG) {
 $user_info   = new user;
 $user_info   = estimatealluserparams($userwaist, $userthigh, $userinseam, $useroutseam, $userstyle);
 $Alldata     = fetchdata();
-$bestfit_idx = solveLS($Alldata, $user_info, $userpricemin, $userpricemax, NUM_BEST_FIT); 
+$bestfit_idx = solveLS($Alldata, $user_info, $userpricemin, $userpricemax, NUM_BEST_FIT);
 $figureMerit = calculateFigureofMerit($Alldata, $user_info);
-$DataBlob    = CreateBlob4Js($Alldata, $figureMerit, $bestfit_idx);
+$DataBlob    = CreateBlob4Js($Alldata, $figureMerit, $bestfit_idx, $userpricemax, $userpricemin, $username);
 echo json_encode($DataBlob);
 
 

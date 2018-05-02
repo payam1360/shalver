@@ -97,6 +97,99 @@ function returnstyle() {
     return style;
 }
 
+
+function plot(data) {
+
+    var svg     = d3.select("svg"),
+    width       = svg.attr("width"),
+    height      = svg.attr("height");
+
+    var price       = returnColumn(data, "price");
+    var figureMerit = returnColumn(data, "merit");
+    
+    var xScale  = d3.scaleLinear()
+                    .domain([d3.min(figureMerit), d3.max(figureMerit)])
+                    .range([0, width]);
+
+    var yScale  = d3.scaleLinear()
+                    .domain([d3.min(price), d3.max(price)])
+                    .range([height, 0]);
+
+    var xAxis = d3.axisTop(xScale).ticks(8),
+        yAxis = d3.axisRight(yScale).ticks(8 * height / width);
+
+    
+    var g = svg.append("g");
+
+   g.selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("cx", function(d) { return xScale(d["merit"]); })
+    .attr("cy", function(d) { return yScale(d["price"]); })
+    .attr("r", 3)
+    .style("fill", function(x) {
+	if (x["bestfit"] == true && x["link"] == "") {return "coral";}
+	if (x["bestfit"] == true && x["link"] != "") {return "green";}
+	if (x["bestfit"] == false ) {return "blue";}})
+    .style("opacity", 0.7)
+    .attr("stroke", function(x) {
+	if (x["bestfit"] == true && x["link"] == "") {return "red";}
+	if (x["bestfit"] == true && x["link"] != "") {return "darkgreen";}
+	if (x["bestfit"] == false ) {return "darkblue";}});
+    
+var gx = svg.append("g")
+    .attr("class", "axis axis--x")
+    .attr("transform", "translate(0," + (height) + ")")
+    .attr("class", "coralAxis")
+    .call(xAxis);
+
+var gy = svg.append("g")
+    .attr("class", "axis axis--y")
+    .attr("transform", "translate(0,0)")
+    .attr("class", "coralAxis")
+    .call(yAxis);
+    
+ svg.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .call(d3.zoom()
+    .scaleExtent([0.8, 4])
+    .on("zoom", zoomed));
+ 
+
+    
+    function zoomed() {
+
+      var transform = d3.event.transform,
+      zx = transform.rescaleX(xScale),
+      zy = transform.rescaleY(yScale);
+
+      gx.call(xAxis.scale(zx));
+      gy.call(yAxis.scale(zy));
+      g.attr("transform", d3.event.transform);
+	
+    }
+
+     
+}
+
+function returnColumn(data, str) {
+
+    var out = [];
+    for(var kk = 0; kk < data.length; kk++) {
+	out.push(data[kk][str]);
+    }
+
+    return out;
+
+}
+
+
+
+
 function submituserdata() {
 
     var inputval  = document.getElementsByClassName("measurement-text");
@@ -105,7 +198,8 @@ function submituserdata() {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-	    console.log(JSON.parse(this.response));
+	    data = JSON.parse(this.response);
+	    plot(data);
         }
     };
 

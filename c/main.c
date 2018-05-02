@@ -10,7 +10,7 @@ void main(void) {
   FILE *fp;
   fp                     = fopen("data.csv", "w");
   char header[255]       = "brand, price, waist, thigh, inseam, outseam, leg_open, rise, hip, web_link, id"; 
-  char printstr[255]     = "%s, %3.2f, %3.2f, %3.2f, %3.2f, %3.2f, %3.2f, %3.2f, %3.2f, %s, %d; \n";
+  char printstr[255]     = "%s, %3.2f, %3.2f, %3.2f, %3.2f, %3.2f, %3.2f, %3.2f, %3.2f, %s, %d;";
   char brands[11][32]    = {"express", "zara", "banana republic",
 			    "guess", "7 for all mankind", "levis",
 			    "diesel", "rag and bone", "wrangler",
@@ -41,7 +41,7 @@ void main(void) {
   float var_rise      = 3;
   srand((unsigned int)time(NULL));
   // writing the header.
-  fprintf(fp, "%s;\n", header);
+  fprintf(fp, "%s;", header);
   for( kk = 0; kk < 256; kk++) {
     brand_idx = (int)(rand()/M*11);
     fprintf( fp, printstr, brands[brand_idx],
