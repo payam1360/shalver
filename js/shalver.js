@@ -100,65 +100,92 @@ function returnstyle() {
 
 function plot(data) {
 
+    
     var svg     = d3.select("svg"),
     width       = svg.attr("width"),
     height      = svg.attr("height");
 
+
     var price       = returnColumn(data, "price");
     var figureMerit = returnColumn(data, "merit");
-    
     var xScale  = d3.scaleLinear()
                     .domain([d3.min(figureMerit), d3.max(figureMerit)])
                     .range([0, width]);
-
     var yScale  = d3.scaleLinear()
                     .domain([d3.min(price), d3.max(price)])
                     .range([height, 0]);
 
+
     var xAxis = d3.axisTop(xScale).ticks(8),
         yAxis = d3.axisRight(yScale).ticks(8 * height / width);
+    
+    
+    var div = d3.select("body").append("div")	
+	.attr("class", "tooltip")				
+	.style("opacity", 0);
+
 
     
-    var g = svg.append("g");
+    var gx = svg.append("g")
+	.attr("class", "axis axis--x")
+	.attr("transform", "translate(0," + (height) + ")")
+	.attr("class", "coralAxis")
+	.call(xAxis);
 
-   g.selectAll("circle")
-    .data(data)
-    .enter()
-    .append("circle")
-    .attr("cx", function(d) { return xScale(d["merit"]); })
-    .attr("cy", function(d) { return yScale(d["price"]); })
-    .attr("r", 3)
-    .style("fill", function(x) {
-	if (x["bestfit"] == true && x["link"] == "") {return "coral";}
-	if (x["bestfit"] == true && x["link"] != "") {return "green";}
-	if (x["bestfit"] == false ) {return "blue";}})
-    .style("opacity", 0.7)
-    .attr("stroke", function(x) {
-	if (x["bestfit"] == true && x["link"] == "") {return "red";}
-	if (x["bestfit"] == true && x["link"] != "") {return "darkgreen";}
-	if (x["bestfit"] == false ) {return "darkblue";}});
+    var gy = svg.append("g")
+	.attr("class", "axis axis--y")
+	.attr("transform", "translate(0,0)")
+	.attr("class", "coralAxis")
+	.call(yAxis);
     
-var gx = svg.append("g")
-    .attr("class", "axis axis--x")
-    .attr("transform", "translate(0," + (height) + ")")
-    .attr("class", "coralAxis")
-    .call(xAxis);
+    
+    var g = svg.append('g');
 
-var gy = svg.append("g")
-    .attr("class", "axis axis--y")
-    .attr("transform", "translate(0,0)")
-    .attr("class", "coralAxis")
-    .call(yAxis);
+    g.append("rect")
+	.attr("width", width)
+	.attr("height", height)
+	.style("fill", "none")
+	.style("pointer-events", "all")
+	.call(d3.zoom()
+	      .scaleExtent([0.8, 4])
+	      .on("zoom", zoomed));
+   
+    var g = svg.append('g');
     
- svg.append("rect")
-    .attr("width", width)
-    .attr("height", height)
-    .style("fill", "none")
-    .style("pointer-events", "all")
-    .call(d3.zoom()
-    .scaleExtent([0.8, 4])
-    .on("zoom", zoomed));
- 
+    g.selectAll("circle")
+	.data(data)
+	.enter()
+	.append("circle")
+    	.attr("cx", function(d) { return xScale(d["merit"]); })
+	.attr("cy", function(d) { return yScale(d["price"]); })
+	.attr("r", 3)
+        .style("fill", function(x) {
+ 	    if (x["bestfit"] == true && x["link"] == "") {return "coral";}
+	    if (x["bestfit"] == true && x["link"] != "") {return "green";}
+	    if (x["bestfit"] == false ) {return "blue";}})
+	.style("opacity", 0.7)
+	.attr("stroke", function(x) {
+	    if (x["bestfit"] == true && x["link"] == "") {return "red";}
+	    if (x["bestfit"] == true && x["link"] != "") {return "darkgreen";}
+	    if (x["bestfit"] == false ) {return "darkblue";}})
+        .on("mouseover", function(d) {		
+            div.transition()		
+                .duration(400)		
+                .style("opacity", .7);		
+            div	.html( "Brand name: " + d["brand"] + "<br>" + "Price: " + d["price"] + "$" + "<br>" +  d["link"])	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
+        })
+        .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(400)
+		.style("opacity", 0);	
+        })
+
+
+
+
+    
 
     
     function zoomed() {
@@ -172,6 +199,7 @@ var gy = svg.append("g")
       g.attr("transform", d3.event.transform);
 	
     }
+    
 
      
 }
@@ -199,6 +227,7 @@ function submituserdata() {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
 	    data = JSON.parse(this.response);
+	   // console.log(this.response);
 	    plot(data);
         }
     };

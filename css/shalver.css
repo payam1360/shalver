@@ -116,6 +116,11 @@ li a {
     margin: auto;
     width: 800px;
     height: 500px;
+//    cursor: grab;
+}
+
+.plot:active {
+//    cursor: grabbing;
 }
 
 .coralAxis line{
@@ -130,4 +135,16 @@ li a {
     fill: coral;
     font-family: Petit Formal Script;
     font-size: 16px;
-}  
+}
+
+div.tooltip {	
+    position: absolute;			
+    text-align: left;								
+    padding: 2px;				
+    font: 12px sans-serif;		
+    background: lightblue;	
+    border: solid 1px;
+    border-color: blue; 
+    border-radius: 8px;			
+    pointer-events: none;
+}
