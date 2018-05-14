@@ -100,12 +100,12 @@ li a {
     cursor: pointer;
 }
 
-.signupButton {
+.signupButton, .loginButton{
     border: 1px solid coral;
     border-radius: 5px;
     background-color: white;
     color: coral;
-    width: 100px;
+    width: 80px;
     height: 30px;
     font-family: Petit Formal Script;
     cursor: pointer;
@@ -137,7 +137,7 @@ li a {
     font-size: 16px;
 }
 
-div.tooltip {	
+.tooltip {	
     position: absolute;			
     text-align: left;								
     padding: 2px;				
@@ -147,4 +147,100 @@ div.tooltip {
     border-color: blue; 
     border-radius: 8px;			
     pointer-events: none;
+}
+
+
+
+.gallery {
+
+    border: 2px solid #ccc;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    width: 30%;
+    align-items: center;
+}
+
+
+.gallery:hover {
+    border: 2px solid #777;
+}
+
+
+.img {
+    flex: 1;
+    width: auto;
+    height: 100%;
+}
+
+.desc {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    font-family: Petit Formal Script;
+}
+
+.results {
+    font-family: Petit Formal Script;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+.Footer {
+    border-style: solid;
+    border-width: 5px 0 0 0;
+    border-color: coral;
+    width: 80%;
+    height: 250px;
+    margin: 10px auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.footer1 {
+
+    flex: 1;
+}
+.footer1 a {
+    color: coral;
+    font-family: Petit Formal Script;
+    font-size: 13pt;
+    text-decoration: none;
+}
+.footer2 {
+    flex: 1;
+    color: coral;
+    font-family: Petit Formal Script;
+    font-size: 13pt;
+}
+
+.footer3  {
+    flex: 1;
+}
+
+.footer3 .fa {
+    padding: 10px;
+    font-size: 30px;
+    width: 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 20%;
+    -moz-transform: scale(0.8);
+    -moz-transition-duration: 0.5s;
+}
+.footer3 .fa:hover {
+    -moz-transform: scale(1.1);
+
+}
+
+.fa-facebook {
+    background: coral;
+    color: white;
+}
+.fa-twitter {
+    background: coral;
+    color: white;
 }

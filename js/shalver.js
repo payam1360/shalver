@@ -37,6 +37,26 @@ function checkuserinput (inputval, textbox_number) {
     
 }
 
+function loadusermeasurements(Response) {
+
+    var inputval  = document.getElementsByClassName("measurement-text");
+    document.getElementById("askforsignup").innerHTML = "";
+    document.getElementById("txtName").innerHTML = "Hi " + USERNAME_GLOBAL;
+    var userwaist = Response.waist;
+    inputval[0].value = userwaist;
+    settextbox2range(0);
+    var userthigh = Response.thigh;
+    inputval[1].value = userthigh;
+    settextbox2range(1);    
+    var userinseam = Response.inseam;
+    inputval[2].value = userinseam;
+    settextbox2range(2);
+    var useroutseam = Response.outseam;
+    inputval[3].value = useroutseam;
+    settextbox2range(3);
+    
+}
+
 
 function clearforms() {
 
@@ -54,9 +74,13 @@ function clearforms() {
     for(var kk = 0; kk < radioval.length; kk++) {
 	radioval[kk].checked = false;
     }
+
+    var svg = d3.select("svg");
+    svg.selectAll("*").remove();
+    
 }
 
-function submitlogin() {
+function submitregister() {
 
 
 
@@ -87,6 +111,41 @@ function submitlogin() {
 
 }
 
+function submitlogin() {
+
+    var inputval  = document.getElementsByClassName("signuptext");
+    if(inputval[0].value == "" || inputval[1].value == "") {
+	return;
+    } else {
+	USERNAME_GLOBAL   = inputval[0].value;
+	USEREMAIL_GLOBAL  = inputval[1].value;
+	inputval[0].value = "";
+	inputval[1].value = "";
+    }
+
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+	    var Response = JSON.parse(this.response);
+	    if(Response.flag == true) {
+		loadusermeasurements(Response);
+	    } else {
+		document.getElementById("askforsignup").innerHTML = "";
+	        document.getElementById("txtName").innerHTML = "User not found. Please register first.";
+	    }
+        }
+    };    
+    xmlhttp.open("POST", "php/CheckUserCredentials.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("username="+USERNAME_GLOBAL+"&useremail="+USEREMAIL_GLOBAL);
+
+}
+
+
+
+
+
 function returnstyle() {
     var styleval  = document.getElementsByClassName("radioButton");
     for(var kk = 0; kk < styleval.length; kk++) {
@@ -100,6 +159,8 @@ function returnstyle() {
 
 function plot(data) {
 
+    var svg = d3.select("svg");
+    svg.selectAll("*").remove();
     
     var svg     = d3.select("svg"),
     width       = svg.attr("width"),
@@ -182,12 +243,6 @@ function plot(data) {
 		.style("opacity", 0);	
         })
 
-
-
-
-    
-
-    
     function zoomed() {
 
       var transform = d3.event.transform,
@@ -200,8 +255,6 @@ function plot(data) {
 	
     }
     
-
-     
 }
 
 function returnColumn(data, str) {
@@ -227,7 +280,6 @@ function submituserdata() {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
 	    data = JSON.parse(this.response);
-	   // console.log(this.response);
 	    plot(data);
         }
     };
