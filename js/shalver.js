@@ -77,6 +77,11 @@ function clearforms() {
 
     var svg = d3.select("svg");
     svg.selectAll("*").remove();
+
+
+    d3.select("div.results").style("opacity", 0);
+    d3.select("div.plot").style("opacity", 0);
+    d3.selectAll("div.gallery").style("opacity", 0);    
     
 }
 
@@ -157,6 +162,66 @@ function returnstyle() {
 }
 
 
+function presentResults(data) {
+
+    d3.select("div.plot")
+    	.transition()
+	.duration(1000)
+	.style("opacity", 1);
+    
+    d3.select("div.results")
+	.transition()
+	.duration(2000)
+	.style("opacity", 1)
+	.text("here is the list of brands and sizes that fits you the best for your buck.");
+
+    var picked       = [];
+    for(var kk = 0; kk < data.length; kk++) {
+	if(data[kk]["bestfit"] == true && data[kk]["link"] != "") {
+	    picked.push(data[kk]);
+	}
+    }
+
+    
+    var top = d3.select("div.result-container");
+    top.selectAll("*").remove();
+    
+    
+    var wrapper = d3.select("div.result-container");
+    var top     = wrapper.selectAll("gallery")
+	.data(picked);
+    
+    var gal     = top
+    	.enter()
+	.append("div")
+	.attr("class", "gallery");
+
+    gal
+    	.append("div")
+	.attr("class", "img")
+	.append("a")
+	.attr("xlink:href", function(d) {return d["link"]})
+	.append("img")
+	.attr("src", function(d) {return "img/" + d["brand"].replace(/\s/g, "") + ".jpg"})
+	.attr("width", 150)
+	.attr("height", 150);
+
+    gal
+	.append("div")
+	.attr("class", "desc")
+	.html(function(d) {return d["link"] + " price: " + d["price"]});
+
+
+    d3.selectAll("div.gallery")
+        .transition()
+	.duration(3000)
+	.style("opacity", 1);
+
+
+    
+}
+
+
 function plot(data) {
 
     var svg = d3.select("svg");
@@ -229,18 +294,28 @@ function plot(data) {
 	    if (x["bestfit"] == true && x["link"] == "") {return "red";}
 	    if (x["bestfit"] == true && x["link"] != "") {return "darkgreen";}
 	    if (x["bestfit"] == false ) {return "darkblue";}})
-        .on("mouseover", function(d) {		
+        .on("mouseover", function(d) {
+	    d3.select(this)
+	        .transition()
+      		.duration(100)
+		.attr("r", 5);
             div.transition()		
                 .duration(400)		
                 .style("opacity", .7);		
             div	.html( "Brand name: " + d["brand"] + "<br>" + "Price: " + d["price"] + "$" + "<br>" +  d["link"])	
                 .style("left", (d3.event.pageX) + "px")		
-                .style("top", (d3.event.pageY - 28) + "px");	
+                .style("top", (d3.event.pageY - 50) + "px");
+
+	    
         })
         .on("mouseout", function(d) {		
             div.transition()		
                 .duration(400)
-		.style("opacity", 0);	
+		.style("opacity", 0);
+	    d3.select(this)
+	        .transition()
+      		.duration(100)
+		.attr("r", 3); 
         })
 
     function zoomed() {
@@ -281,6 +356,7 @@ function submituserdata() {
         if (this.readyState == 4 && this.status == 200) {
 	    data = JSON.parse(this.response);
 	    plot(data);
+	    presentResults(data);
         }
     };
 
