@@ -6,6 +6,8 @@
 
 var USERNAME_GLOBAL;
 var USEREMAIL_GLOBAL;
+var SLIDE_IDX = 1;
+
 
 function setrange2textbox (slider_number) {
 
@@ -40,8 +42,6 @@ function checkuserinput (inputval, textbox_number) {
 function loadusermeasurements(Response) {
 
     var inputval  = document.getElementsByClassName("measurement-text");
-    document.getElementById("askforsignup").innerHTML = "";
-    document.getElementById("txtName").innerHTML = "Hi " + USERNAME_GLOBAL;
     var userwaist = Response.waist;
     inputval[0].value = userwaist;
     settextbox2range(0);
@@ -85,36 +85,28 @@ function clearforms() {
     
 }
 
-function submitregister() {
 
+function  unlockTheTool() {
 
-
-    var inputval  = document.getElementsByClassName("signuptext");
-    if(inputval[0].value == "" || inputval[1].value == "") {
-	return;
-    } else {
-	USERNAME_GLOBAL   = inputval[0].value;
-	USEREMAIL_GLOBAL  = inputval[1].value;
-	inputval[0].value = "";
-	inputval[1].value = "";
-    }
-
-    document.getElementById("askforsignup").innerHTML = "";
-    document.getElementById("txtName").innerHTML = "Hi " + USERNAME_GLOBAL;
-
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("txtName").innerHTML =
-		document.getElementById("txtName").innerHTML +
-		". Let's get started :)";
-        }
-    };    
-    xmlhttp.open("POST", "php/SaveUserCredentials.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send("username="+USERNAME_GLOBAL+"&useremail="+USEREMAIL_GLOBAL);
-
+    var measure = d3.selectAll(".Measurements");
+    measure
+	.transition()
+	.duration(1000)
+	.style("opacity", 1);
+    var submit = d3.select(".submitButton");
+    submit
+	.transition()
+	.duration(1000)
+	.style("opacity", 1);
+    var clear = d3.select(".clearButton");
+    clear
+	.transition()
+	.duration(1000)
+	.style("opacity", 1);
+    
+    
 }
+
 
 function submitlogin() {
 
@@ -126,25 +118,27 @@ function submitlogin() {
 	USEREMAIL_GLOBAL  = inputval[1].value;
 	inputval[0].value = "";
 	inputval[1].value = "";
-    }
-
-
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-	    var Response = JSON.parse(this.response);
-	    if(Response.flag == true) {
-		loadusermeasurements(Response);
-	    } else {
-		document.getElementById("askforsignup").innerHTML = "";
-	        document.getElementById("txtName").innerHTML = "User not found. Please register first.";
+    
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+		var Response = JSON.parse(this.response);
+		if(Response.flag == true) {
+		    loadusermeasurements(Response);
+		    unlockTheTool();
+		    document.getElementsByClassName("txtName")[0].innerHTML = "Welcome back "
+			+ USERNAME_GLOBAL + ". Your sizes are loaded.";
+		} else if(Response.flag == false) {
+		    document.getElementsByClassName("txtName")[0].innerHTML = "Hi " + USERNAME_GLOBAL +
+			". Let's get started :)";
+		    unlockTheTool();
+		}
 	    }
-        }
-    };    
-    xmlhttp.open("POST", "php/CheckUserCredentials.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send("username="+USERNAME_GLOBAL+"&useremail="+USEREMAIL_GLOBAL);
-
+	};
+	xmlhttp.open("POST", "php/CheckUserCredentials.php", true);
+	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xmlhttp.send("username="+USERNAME_GLOBAL+"&useremail="+USEREMAIL_GLOBAL);
+    }
 }
 
 
@@ -370,5 +364,70 @@ function submituserdata() {
 	"&userstyle="+style+"&pricemin="+inputval[4].value+"&pricemax="+inputval[5].value;
     
     xmlhttp.send(userdata);
+
+}
+
+
+
+function plusDivs(n) {
+    
+    var num_fig = 4;
+    SLIDE_IDX += n;
+    if(SLIDE_IDX < 1) {SLIDE_IDX = num_fig;}
+    else if (SLIDE_IDX > num_fig) {SLIDE_IDX = 1;}
+    showDivs(SLIDE_IDX);
+}
+
+function showDivs(n) {
+
+    var x = d3.select('.mainslider');
+    x
+	.selectAll('*')
+	.remove();
+    
+    x.append("img")
+	.attr("src", "img/sliders/" + n + ".jpg")
+	.attr("class", "sliderimg")
+	.style('opacity', 0);
+
+    x.append("div")
+	.attr("class", "slideNav");
+
+    var y = d3.select(".slideNav");
+
+    y.append("div")
+	.attr("class", "arrow-left")
+	.append("div")
+	.attr("class", "fa fa-angle-left")
+	.on("click", function () {plusDivs(-1);});
+    y.append("div")
+	.attr("class", "arrow-right")
+	.append("div")
+	.attr("class", "fa fa-angle-right")
+	.on("click", function () {plusDivs(+1);});
+
+    y.append("div")
+	.attr("class", "circleNav c1");
+    y.append("div")
+	.attr("class", "circleNav c2");
+    y.append("div")
+	.attr("class", "circleNav c3");
+    y.append("div")
+	.attr("class", "circleNav c4");
+    
+      
+    d3.selectAll(".sliderimg")
+	.transition()
+	.duration(1000)
+	.style('opacity', 1);
+
+    d3.selectAll(".circleNav")
+	.style("background", "none");
+    
+    d3.select(".c" + n)
+	.transition()
+	.duration(1000)
+	.style("background", "coral");
+    
 
 }

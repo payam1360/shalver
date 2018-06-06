@@ -16,42 +16,48 @@
     <h1> Shalver </h1>
   </div>
 
-  <div class="flex-container">
-     <div class="navigation-bar">
-    <ul>
-      <li><a href="home.html">Home</a></li>
-      <li><a href="guide.html">Guide</a></li>
-      <li><a href="tool.html">Tool</a></li>
-    </ul>
-</div>
-    <div class="navigation-bar">
-      <form>
-	<input class="signuptext" placeholder="first name">
-	<input class="signuptext" placeholder="email">
-	<input type="button" value="register" class="signupButton" onclick="submitregister()">
-	<input type="button" value="log in" class="loginButton" onclick="submitlogin()">	
-      </form>
-    </div>
-  </div>
-   
-  <div class="flex-container"> 
-    <div class="signuptextstyle" id="askforsignup">
-      please sign up.
-    </div>
-      <div class="signuptextstyle" id="txtName"></div>
-  </div>
-
-  <div class="flex-container">
-    <div class="signuptextstyle">
-      <label for="name" >Choose your fit:</label>
-  <form>
-    <input type="radio" name="fittype" value="skinny" class="radioButton"> Skinny
-    <input type="radio" name="fittype" value="normal" class="radioButton"> Normal
-    <input type="radio" name="fittype" value="loose" class="radioButton"> Loose  
-  </form>
-    </div>
-  </div>
   
+
+<div class="mainslider">
+  <img class="sliderimg" src="img/sliders/1.jpg">
+  <div class="slideNav">
+    <div class="arrow-left"> <div class="fa fa-angle-left" onclick="plusDivs(-1);"></div></div>
+    <div class="arrow-right"> <div class="fa fa-angle-right" onclick="plusDivs(+1);"></div></div>
+    <div class="circleNav c1"> </div>
+    <div class="circleNav c2"> </div>
+    <div class="circleNav c3"> </div>
+    <div class="circleNav c4"> </div>
+  </div>
+</div>
+
+
+  
+<div class="signuptextstyle">
+  <div class="txtName">sign up to unlock the tool. </div>
+  <div class="navigation-bar">
+    <form>
+      <input class="signuptext" placeholder="first name">
+      <input class="signuptext" placeholder="email">
+      <div value="register" class="fa fa-user-plus" onclick="submitlogin()"></div>
+    </form>
+  </div>
+</div>
+
+
+  
+<div class="flex-container">
+  <div class="Measurements">
+    <label for="name">Choose your fit:</label>
+    <form style=" font-family: Petit Formal Script; margin-top: 20px;">
+      <input type="radio" name="fittype" value="skinny" class="radioButton"> Skinny
+      <input type="radio" name="fittype" value="normal" class="radioButton"> Normal
+      <input type="radio" name="fittype" value="loose" class="radioButton"> Loose  
+    </form>
+  </div>
+</div>
+
+
+
 <div class="flex-container">
 <!-- One block of measurement -->
   <div class="Measurements">
@@ -121,7 +127,7 @@
 
 <div style="text-align:center;">
   <form>
-    <input type="button" value="submit" class="submitButton" onclick="submituserdata()">
+    <input type="button" value="search" class="submitButton" onclick="submituserdata()">
     <input type="button" value="clear"  class="clearButton" onclick="clearforms()">    
   </form>
 </div>
