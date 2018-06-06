@@ -135,7 +135,7 @@ function submitlogin() {
 		}
 	    }
 	};
-	xmlhttp.open("POST", "php/CheckUserCredentials.php", true);
+	xmlhttp.open("POST", "php/register.php", true);
 	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xmlhttp.send("username="+USERNAME_GLOBAL+"&useremail="+USEREMAIL_GLOBAL);
     }
