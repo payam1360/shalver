@@ -42,19 +42,41 @@ function checkuserinput (inputval, textbox_number) {
 function loadusermeasurements(Response) {
 
     var inputval  = document.getElementsByClassName("measurement-text");
+    var sliderval = document.getElementsByClassName("range");
     var userwaist = Response.waist;
-    inputval[0].value = userwaist;
-    settextbox2range(0);
+    if(userwaist == null) {
+	inputval[0].value = "";
+	sliderval[0].value = sliderval[0].placeholder;
+    } else {
+	inputval[0].value = userwaist;
+	settextbox2range(0);
+    }
     var userthigh = Response.thigh;
-    inputval[1].value = userthigh;
-    settextbox2range(1);    
+    if(userthigh == null) {
+	inputval[1].value = "";
+	sliderval[1].value = sliderval[1].placeholder;	
+    } else {
+	inputval[1].value = userthigh;
+	settextbox2range(1);
+    }
     var userinseam = Response.inseam;
-    inputval[2].value = userinseam;
-    settextbox2range(2);
-    var useroutseam = Response.outseam;
-    inputval[3].value = useroutseam;
-    settextbox2range(3);
+    if(userinseam == null) {
+	sliderval[2].value = sliderval[2].placeholder;
+	inputval[2].value = "";
+    } else {
+	inputval[2].value = userinseam;
+	settextbox2range(2);
+    }
+
     
+    var useroutseam = Response.outseam;
+    if(useroutseam == null) {
+	sliderval[3].value = sliderval[3].placeholder;
+	inputval[3].value = "";
+    } else {
+	inputval[3].value = useroutseam;
+	settextbox2range(3);
+    }    
 }
 
 
@@ -107,11 +129,58 @@ function  unlockTheTool() {
     
 }
 
+function transit2greeting() {
+
+    var signupbox = d3.select(".signuptextstyle");
+
+
+    signupbox
+	.selectAll(".navigation-bar")
+	.remove();    
+
+    signupbox
+	.selectAll(".txtName")
+	.remove();
+ 
+    
+    signupbox
+	.transition()
+	.duration(1000)
+	.style("width", "0px")
+    	.style("height", "0px")
+	.style("margin-top", "40px")
+
+    greeting = d3.select(".greeting")
+	.append("div")
+	.attr("class", "txtName")
+    	.transition()
+	.duration(2000)
+	.style("color", "coral")
+	.style("text-align","center");
+    
+}
+
+
+function checknameandemail(inputval) {
+    var flag;
+    if(inputval[0].value == "" || inputval[1].value == "") {
+	flag = false;
+	return flag;
+    } else {
+	re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	flag = re.test(inputval[1].value);
+	return flag;
+    }
+}
+
+
 
 function submitlogin() {
 
     var inputval  = document.getElementsByClassName("signuptext");
-    if(inputval[0].value == "" || inputval[1].value == "") {
+    var flag      = checknameandemail(inputval);
+    if(flag == false) {
+	document.getElementsByClassName("txtName")[0].innerHTML = "Invalid email !";
 	return;
     } else {
 	USERNAME_GLOBAL   = inputval[0].value;
@@ -124,11 +193,14 @@ function submitlogin() {
             if (this.readyState == 4 && this.status == 200) {
 		var Response = JSON.parse(this.response);
 		if(Response.flag == true) {
+		    transit2greeting();
 		    loadusermeasurements(Response);
 		    unlockTheTool();
 		    document.getElementsByClassName("txtName")[0].innerHTML = "Welcome back "
 			+ USERNAME_GLOBAL + ". Your sizes are loaded.";
 		} else if(Response.flag == false) {
+		    transit2greeting();
+		    clearforms();
 		    document.getElementsByClassName("txtName")[0].innerHTML = "Hi " + USERNAME_GLOBAL +
 			". Let's get started :)";
 		    unlockTheTool();
@@ -147,9 +219,10 @@ function submitlogin() {
 
 function returnstyle() {
     var styleval  = document.getElementsByClassName("radioButton");
+    var style = "";
     for(var kk = 0; kk < styleval.length; kk++) {
 	if(styleval[kk].checked == true) {
-	    var style = styleval[kk].value;
+	    style = styleval[kk].value;
 	}
     }
     return style;
@@ -337,13 +410,137 @@ function returnColumn(data, str) {
 
 }
 
+function sanitycheckuserinput(style, inputval) {
 
+    var htmltext = d3.select(".radioselecttext")
+	    .html();
+    var flag = true;
+    if(style == "") {
+	d3.select(".radioselecttext")
+	    .style("color", "red")
+	    .html(htmltext + "*      <-- please select!");
+	flag = false;
+	return flag;
+    } else {
+	d3.select(".radioselecttext")
+	    .style("color", "black")
+	    .html("Choose your fit:");	
+    }
+
+
+    if(inputval[0].value == "") {
+	d3.select("#waistname")
+	    .style("color","red")
+	    .html("Waist*");
+	d3.select("#waistid")
+	    .style("border-color","red");
+	flag = false;
+	return flag;
+    }else {
+	d3.select("#waistname")
+	    .style("color","black")
+	    .html("Waist");
+	d3.select("#waistid")
+	    .style("border-color","grey");	
+    }
+
+    if(inputval[1].value == "") {
+	d3.select("#thighname")
+	    .style("color","red")
+	    .html("Thigh*");
+	d3.select("#thighid")
+	    .style("border-color","red");
+	flag = false;
+	return flag;
+    }else {
+	d3.select("#thighname")
+	    .style("color","black")
+	    .html("Thigh");
+	d3.select("#thighid")
+	    .style("border-color","grey");	
+    }
+
+    if(inputval[2].value == "") {
+	d3.select("#inseamname")
+	    .style("color","red")
+	    .html("Inseam*");
+	d3.select("#inseamid")
+	    .style("border-color","red");
+	flag = false;
+	return flag;
+    }else {
+	d3.select("#inseamname")
+	    .style("color","black")
+	    .html("Inseam");
+	d3.select("#inseamid")
+	    .style("border-color","grey");	
+    }
+
+
+    if(inputval[3].value == "") {
+	d3.select("#outseamname")
+	    .style("color","red")
+	    .html("Outseam*");
+	d3.select("#outseamid")
+	    .style("border-color","red");
+	flag = false;
+	return flag;
+    }else {
+	d3.select("#outseamname")
+	    .style("color","black")
+	    .html("Outseam");
+	d3.select("#outseamid")
+	    .style("border-color","grey");	
+    }
+
+
+    
+    if(inputval[4].value == "") {
+	d3.select(".pricetexttag")
+	    .style("color","red")
+	    .html("Price ($)*");
+	d3.select("#pricemininput")
+	    .style("border-color","red");
+	flag = false;
+	return flag;
+    }else {
+	d3.select(".pricetexttag")
+	    .style("color","black")
+	    .html("Price ($)");
+	d3.select("#pricemininput")
+	    .style("border-color","grey");	
+    }
+
+    if(inputval[5].value == "") {
+	d3.select(".pricetexttag")
+	    .style("color","red")
+	    .html("Price ($)*");
+	d3.select("#pricemaxinput")
+	    .style("border-color","red");
+	flag = false;
+	return flag;
+    }else {
+	d3.select(".pricetexttag")
+	    .style("color","black")
+	    .html("Price ($)");
+	d3.select("#pricemaxinput")
+	    .style("border-color","grey");
+	
+    }
+
+    
+}
 
 
 function submituserdata() {
 
     var inputval  = document.getElementsByClassName("measurement-text");
     var style     = returnstyle();
+
+    var flag      = sanitycheckuserinput(style, inputval);
+    if(flag == false) {
+	return;
+    }
     
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
@@ -373,12 +570,16 @@ function plusDivs(n) {
     
     var num_fig = 4;
     SLIDE_IDX += n;
-    if(SLIDE_IDX < 1) {SLIDE_IDX = num_fig;}
-    else if (SLIDE_IDX > num_fig) {SLIDE_IDX = 1;}
+    if (SLIDE_IDX < 1) {SLIDE_IDX = num_fig;}
+    if (SLIDE_IDX > num_fig) {SLIDE_IDX = 1;}
     showDivs(SLIDE_IDX);
 }
 
 function showDivs(n) {
+
+
+    var AdText = ["baba shalver.com kheili khoobe", "estefadeh kon halesho bebar",
+		  "ye pooli am bere too jib e ma", "be khoda koonam pare shod neveshtamesh"];
 
     var x = d3.select('.mainslider');
     x
@@ -393,6 +594,10 @@ function showDivs(n) {
     x.append("div")
 	.attr("class", "slideNav");
 
+    x.append("div")
+	.attr("class", "sliderText")
+	.html(AdText[n-1]);
+    
     var y = d3.select(".slideNav");
 
     y.append("div")
@@ -428,6 +633,11 @@ function showDivs(n) {
 	.transition()
 	.duration(1000)
 	.style("background", "coral");
+
+    d3.select(".sliderText")
+	.transition()
+	.duration(2500)
+	.style("opacity", 1);
     
 
 }
