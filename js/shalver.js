@@ -7,7 +7,7 @@
 var USERNAME_GLOBAL;
 var USEREMAIL_GLOBAL;
 var SLIDE_IDX = 1;
-
+var timeOutSlider = null;
 
 function setrange2textbox (slider_number) {
 
@@ -168,7 +168,10 @@ function checknameandemail(inputval) {
 	return flag;
     } else {
 	re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	flag = re.test(inputval[1].value);
+	im = /^[a-zA-Z ]{2,30}$/;
+	var flag1 = re.test(inputval[1].value);
+	var flag2 = im.test(inputval[0].value);
+	flag = flag1 && flag2; 
 	return flag;
     }
 }
@@ -180,7 +183,7 @@ function submitlogin() {
     var inputval  = document.getElementsByClassName("signuptext");
     var flag      = checknameandemail(inputval);
     if(flag == false) {
-	document.getElementsByClassName("txtName")[0].innerHTML = "Invalid email !";
+	document.getElementsByClassName("txtName")[0].innerHTML = "Invalid name or email !";
 	return;
     } else {
 	USERNAME_GLOBAL   = inputval[0].value;
@@ -573,6 +576,20 @@ function plusDivs(n) {
     if (SLIDE_IDX < 1) {SLIDE_IDX = num_fig;}
     if (SLIDE_IDX > num_fig) {SLIDE_IDX = 1;}
     showDivs(SLIDE_IDX);
+    timeOutSlider = setTimeout("plusDivs(+1)", 5000);
+
+}
+
+
+function plusDivsManual(n) {
+    
+    var num_fig = 4;
+    SLIDE_IDX += n;
+    if (SLIDE_IDX < 1) {SLIDE_IDX = num_fig;}
+    if (SLIDE_IDX > num_fig) {SLIDE_IDX = 1;}
+    showDivs(SLIDE_IDX);
+    clearTimeout(timeOutSlider);
+    timeOutSlider = setTimeout("plusDivs(+1)", 5000);
 }
 
 function showDivs(n) {
@@ -604,12 +621,12 @@ function showDivs(n) {
 	.attr("class", "arrow-left")
 	.append("div")
 	.attr("class", "fa fa-angle-left")
-	.on("click", function () {plusDivs(-1);});
+	.on("click", function () {plusDivsManual(-1);});
     y.append("div")
 	.attr("class", "arrow-right")
 	.append("div")
 	.attr("class", "fa fa-angle-right")
-	.on("click", function () {plusDivs(+1);});
+	.on("click", function () {plusDivsManual(+1);});
 
     y.append("div")
 	.attr("class", "circleNav c1");
