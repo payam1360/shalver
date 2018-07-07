@@ -253,11 +253,37 @@ a:link {
 .results {
     font-family: Petit Formal Script;
     text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
     opacity: 0;
 }
 
+.xLabel {
+    color: coral;
+    font-family: Petit Formal Script;
+    width: 80%;
+    height: 50px;
+    font-size: 16px;
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 10px;
+    opacity: 0;
+    
+}
+
+.yLabel {
+    color: coral;
+    font-family: Petit Formal Script;
+    width: 100px;
+    height: 500px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 500px;
+    float: left;
+    vertical-align: middle;
+    -moz-transform: translate(130px, 0px);
+    opacity: 0;
+}
 
 .Footer {
     border-style: solid;

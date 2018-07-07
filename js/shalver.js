@@ -188,6 +188,8 @@ function submitlogin() {
     } else {
 	USERNAME_GLOBAL   = inputval[0].value;
 	USEREMAIL_GLOBAL  = inputval[1].value;
+	setCookie("shalverusername", USERNAME_GLOBAL, 365);
+	setCookie("shalveruseremail", USEREMAIL_GLOBAL, 365);
 	inputval[0].value = "";
 	inputval[1].value = "";
     
@@ -238,6 +240,17 @@ function presentResults(data) {
     	.transition()
 	.duration(1000)
 	.style("opacity", 1);
+
+    d3.select(".xLabel")
+    	.transition()
+	.duration(1000)
+	.style("opacity", 1);
+    
+    d3.select(".yLabel")
+    	.transition()
+	.duration(1000)
+	.style("opacity", 1);
+
     
     d3.select("div.results")
 	.transition()
@@ -301,7 +314,6 @@ function plot(data) {
     width       = svg.attr("width"),
     height      = svg.attr("height");
 
-
     var price       = returnColumn(data, "price");
     var figureMerit = returnColumn(data, "merit");
     var xScale  = d3.scaleLinear()
@@ -327,7 +339,7 @@ function plot(data) {
 	.attr("transform", "translate(0," + (height) + ")")
 	.attr("class", "coralAxis")
 	.call(xAxis);
-
+    
     var gy = svg.append("g")
 	.attr("class", "axis axis--y")
 	.attr("transform", "translate(0,0)")
@@ -656,5 +668,52 @@ function showDivs(n) {
 	.duration(2500)
 	.style("opacity", 1);
     
+
+}
+
+
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function checkCookie(cname) {
+    var user = getCookie(cname);
+    if (user != "") {
+	if (cname == "shalveruseremail") {
+	    var inputval  = d3.select("#emailbox");
+	}
+	if (cname == "shalverusername") {
+	    var inputval  = d3.select("#namebox");
+	}
+	setOption(inputval, user);
+	console.log(document.cookie);
+    } 
+} 
+
+
+function setOption(input, user) {
+	input.select("option").remove();
+	input
+	    .append("option")
+	    .attr("value", user);
 
 }

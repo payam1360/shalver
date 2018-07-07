@@ -38,9 +38,13 @@
 <div class="signuptextstyle">
   <div class="txtName">sign up to unlock the tool. </div>
   <div class="navigation-bar">
-    <form>
-      <input class="signuptext" placeholder="first name">
-      <input class="signuptext" placeholder="email">
+    <form >
+      <input list="namebox" class="signuptext" placeholder="first name" onclick="checkCookie(&quot;shalverusername&quot;)">
+      <datalist id="namebox">
+      </datalist>
+      <input list="emailbox" class="signuptext" placeholder="email" onclick="checkCookie(&quot;shalveruseremail&quot;)">
+      <datalist id="emailbox">
+      </datalist>
       <div value="register" class="fa fa-user-plus" onclick="submitlogin()"></div>
     </form>
   </div>
@@ -139,10 +143,16 @@
   </form>
 </div>
 
+<div class="yLabel">
+  Price ($)
+</div>
 <div class="plot"> 
 <svg width="800" height="500"></svg>
 </div>
 
+<div class="xLabel">
+  Figure of Merit
+</div>
 
 <div class="results">
 </div>
@@ -159,7 +169,7 @@
     <a  href="www.shalver.com"> &copy 2018 Shalver</a>
   </div>
   <div class="footer2">
-    my logo will go here;
+      <img class="logoimg" src="img/logo/logo.png">
   </div>
   <div class="footer3">
     <a href="www.facebook.com" class="fa fa-facebook"></a>
