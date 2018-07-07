@@ -561,6 +561,7 @@ function submituserdata() {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
 	    data = JSON.parse(this.response);
+	    console.log(data);
 	    plot(data);
 	    presentResults(data);
         }
@@ -677,7 +678,7 @@ function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;";
 }
 
 function getCookie(cname) {
@@ -705,7 +706,6 @@ function checkCookie(cname) {
 	    var inputval  = d3.select("#namebox");
 	}
 	setOption(inputval, user);
-	console.log(document.cookie);
     } 
 } 
 
