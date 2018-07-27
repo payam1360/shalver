@@ -92,7 +92,7 @@ function saveusermeasurementintoDB($userwaist, $userthigh, $userinseam, $userout
         return false;
     } else {
        
-        $servername  = "localhost";
+        $servername  = "shalver.cdfycegg5axy.us-west-1.rds.amazonaws.com";
         $loginname   = "root";
         $password    = "Asghar22";
         $dbname      = "Shalver";
@@ -166,7 +166,7 @@ function estimatealluserparams($userwaist, $userthigh, $userinseam, $useroutseam
 
 function fetchdata() {
 
-        $servername  = "localhost";
+        $servername  = "shalver.cdfycegg5axy.us-west-1.rds.amazonaws.com";
         $loginname   = "root";
         $password    = "Asghar22";
         $dbname      = "Shalver";
