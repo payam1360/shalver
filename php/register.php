@@ -6,7 +6,7 @@ define(DBG, false);
 
 function fetchuserdata() {
 
-        $servername  = "localhost";
+        $servername  = "shalver.cdfycegg5axy.us-west-1.rds.amazonaws.com";
         $loginname   = "root";
         $password    = "Asghar22";
         $dbname      = "Shalver";
@@ -69,7 +69,7 @@ function checknames($usersInfo, $username, $useremail) {
 
 function register_user($firstname, $useremail) {
     
-    $servername = "localhost";
+    $servername = "shalver.cdfycegg5axy.us-west-1.rds.amazonaws.com";
     $username   = "root";
     $password   = "Asghar22";
     $dbname     = "Shalver";
