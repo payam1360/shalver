@@ -1,7 +1,7 @@
 
 <?php
 
-define(DBG, false);
+define(DBG, true);
 
 
 function fetchuserdata() {

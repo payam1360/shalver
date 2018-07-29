@@ -196,8 +196,9 @@ function submitlogin() {
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-		var Response = JSON.parse(this.response);
-		if(Response.flag == true) {
+		console.log(this);
+//		var Response = JSON.parse(this.response);
+/*		if(Response.flag == true) {
 		    transit2greeting();
 		    loadusermeasurements(Response);
 		    unlockTheTool();
@@ -210,6 +211,7 @@ function submitlogin() {
 			". Let's get started :)";
 		    unlockTheTool();
 		}
+*/
 	    }
 	};
 	xmlhttp.open("POST", "php/register.php", true);
