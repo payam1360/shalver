@@ -5,11 +5,11 @@
 #include <time.h>
 #include <stdlib.h>
 
-void main(void) {
+int main(void) {
 
   FILE *fp;
   fp                     = fopen("data.csv", "w");
-  char header[255]       = "brand, price, waist, thigh, inseam, outseam, leg_open, rise, hip, web_link, id"; 
+  char header[255]       = "brand,price,waist,thigh,inseam,outseam,leg_open,rise,hip,web_link,id"; 
   char printstr[255]     = "%s, %3.2f, %3.2f, %3.2f, %3.2f, %3.2f, %3.2f, %3.2f, %3.2f, %s, %d;";
   char brands[11][32]    = {"express", "zara", "banana republic",
 			    "guess", "7 for all mankind", "levis",
@@ -59,4 +59,6 @@ void main(void) {
   
   fclose(fp);
 
+    
+    return(0);
 } 

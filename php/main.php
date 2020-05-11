@@ -8,7 +8,7 @@ define("LEG_OPEN",5);
 define("RISE",    6);
 define("MAX_ERROR", 1000);
 define("NUM_BEST_FIT", 4);
-define("DBG", false); 
+define("DBG", false);
 
 class user {
     
@@ -92,9 +92,9 @@ function saveusermeasurementintoDB($userwaist, $userthigh, $userinseam, $userout
         return false;
     } else {
        
-        $servername  = "shalver.cdfycegg5axy.us-west-1.rds.amazonaws.com";
+        $servername  = "127.0.0.1";
         $loginname   = "root";
-        $password    = "Asghar22";
+        $password    = "@Brcm123";
         $dbname      = "Shalver";
         $table1name  = "Users";
         // Create connection
@@ -135,17 +135,17 @@ function estimatealluserparams($userwaist, $userthigh, $userinseam, $useroutseam
     
     switch ($userstyle) {
 
-        case skinny:
+        case 'skinny':
             $fit_factor      = 1.0;
             $user_data->set_member( 0.6 * $userthigh, LEG_OPEN);
             $user_data->set_member(($userwaist + $userthigh * 2) * 1.0 * $fit_factor / 2, HIP);
             break;
-        case normal:
+        case 'normal':
             $fit_factor      = 1.01;
             $user_data->set_member( 0.8 * $userthigh, LEG_OPEN);
             $user_data->set_member(($userwaist + $userthigh * 2) * 1.05 * $fit_factor / 2, HIP);
             break;
-        case loose:
+        case 'loose':
             $fit_factor      = 1.05;
             $user_data->set_member( 0.9 * $userthigh, LEG_OPEN);
             $user_data->set_member(($userwaist + $userthigh * 2) * 1.1 * $fit_factor / 2, HIP);
@@ -166,9 +166,9 @@ function estimatealluserparams($userwaist, $userthigh, $userinseam, $useroutseam
 
 function fetchdata() {
 
-        $servername  = "shalver.cdfycegg5axy.us-west-1.rds.amazonaws.com";
+        $servername  = "127.0.0.1";
         $loginname   = "root";
-        $password    = "Asghar22";
+        $password    = "@Brcm123";
         $dbname      = "Shalver";
         $tablename   = "Brands";
         // Create connection
@@ -186,7 +186,7 @@ function fetchdata() {
 
         if ($result->num_rows > 0 and DBG) {
             // output data of each row
-            echo "data retrieved successfully";
+            echo "data retrieved successfully from Brands table";
         } elseif(DBG) {
             echo "0 results";
         }
@@ -204,7 +204,7 @@ function fetchdata() {
 function solveLS($Alldata, $user_info, $userpricemin, $userpricemax, $numOutput) {
 
 
-    // defining the weights\
+    // defining the weights
     $w_waist     = 0.25;
     $w_thigh     = 0.15;
     $w_inseam    = 0.25;
@@ -213,6 +213,7 @@ function solveLS($Alldata, $user_info, $userpricemin, $userpricemax, $numOutput)
     $w_hip       = 0.15;
     $w_rise      = 0.05;
 
+    
     
     $waist     = array_column($Alldata, "waist");
     $thigh     = array_column($Alldata, "thigh");
@@ -225,7 +226,9 @@ function solveLS($Alldata, $user_info, $userpricemin, $userpricemax, $numOutput)
     $M         = count($waist);
     $maxMargin = 0;
     $minMargin = 0;
-
+    
+    
+    
     $index    = array();
     $error    = array();
     for($kx = 0; $kx < $numOutput; $kx++) {
@@ -233,6 +236,8 @@ function solveLS($Alldata, $user_info, $userpricemin, $userpricemax, $numOutput)
     }
 
     for($kk = 0; $kk < $M; $kk++) {
+        
+        
         
         $LS      = $w_waist    * abs($waist[$kk]    - $user_info->get_member(WAIST    )) ** 2 +
                    $w_thigh    * abs($thigh[$kk]    - $user_info->get_member(THIGH    )) ** 2 +
@@ -258,9 +263,9 @@ function solveLS($Alldata, $user_info, $userpricemin, $userpricemax, $numOutput)
 }
 
 
-function calculateFigureofMerit($Alldata, $user_info){
+function calculateFigureofMerit($Alldata, $user_info, $userpricemin, $userpricemax){
 
-    // defining the weights\
+    // defining the weights
     $w_waist     = 0.25;
     $w_thigh     = 0.15;
     $w_inseam    = 0.25;
@@ -268,6 +273,7 @@ function calculateFigureofMerit($Alldata, $user_info){
     $w_leg_open  = 0.10;
     $w_hip       = 0.15;
     $w_rise      = 0.05;
+    $price_w     = 0.2;
     
     $waist     = array_column($Alldata, "waist");
     $thigh     = array_column($Alldata, "thigh");
@@ -276,7 +282,10 @@ function calculateFigureofMerit($Alldata, $user_info){
     $leg_open  = array_column($Alldata, "leg_open");
     $hip       = array_column($Alldata, "hip");
     $rise      = array_column($Alldata, "rise");
+    $price     = array_column($Alldata, "price");
     $M         = count($waist);
+    $mean_user_price = ($userpricemin + $userpricemax) / 2;
+    
     $figureofmerit = array();
 
     // calculating the user figure of merit as well:
@@ -286,35 +295,37 @@ function calculateFigureofMerit($Alldata, $user_info){
                           $w_outseam  * $user_info->get_member(OUTSEAM  )  +
                           $w_leg_open * $user_info->get_member(LEG_OPEN )  +
                           $w_hip      * $user_info->get_member(HIP      )  +
-                          $w_rise     * $user_info->get_member(RISE     ) ;
+                          $w_rise     * $user_info->get_member(RISE     )  +
+                          $price_w    * $mean_user_price ;
 
     
     for($kk = 0; $kk < $M; $kk++) {
 
-        $sign               =  $w_waist    * ($waist[$kk]    - $user_info->get_member(WAIST    )) +
-                               $w_thigh    * ($thigh[$kk]    - $user_info->get_member(THIGH    )) +
-                               $w_inseam   * ($inseam[$kk]   - $user_info->get_member(INSEAM   )) +
-                               $w_outseam  * ($outseam[$kk]  - $user_info->get_member(OUTSEAM  )) +
-                               $w_leg_open * ($leg_open[$kk] - $user_info->get_member(LEG_OPEN )) +
-                               $w_hip      * ($hip[$kk]      - $user_info->get_member(HIP      )) +
-                               $w_rise     * ($rise[$kk]     - $user_info->get_member(RISE     )) ;
+        $sign  =  $w_waist    * ($waist[$kk]    - $user_info->get_member(WAIST    )) +
+                  $w_thigh    * ($thigh[$kk]    - $user_info->get_member(THIGH    )) +
+                  $w_inseam   * ($inseam[$kk]   - $user_info->get_member(INSEAM   )) +
+                  $w_outseam  * ($outseam[$kk]  - $user_info->get_member(OUTSEAM  )) +
+                  $w_leg_open * ($leg_open[$kk] - $user_info->get_member(LEG_OPEN )) +
+                  $w_hip      * ($hip[$kk]      - $user_info->get_member(HIP      )) +
+                  $w_rise     * ($rise[$kk]     - $user_info->get_member(RISE     )) ;
         
         if($sign < 0) {
-            $sign = -1;
+            $sign = -0.5;
         }
         else {
-            $sign = 1;
+            $sign = 0.5;
         }
 
-         $hamming_distance  =  $w_waist    * abs($waist[$kk]    - $user_info->get_member(WAIST    )) ** 2 +
-                               $w_thigh    * abs($thigh[$kk]    - $user_info->get_member(THIGH    )) ** 2 +
-                               $w_inseam   * abs($inseam[$kk]   - $user_info->get_member(INSEAM   )) ** 2 +
-                               $w_outseam  * abs($outseam[$kk]  - $user_info->get_member(OUTSEAM  )) ** 2 +
-                               $w_leg_open * abs($leg_open[$kk] - $user_info->get_member(LEG_OPEN )) ** 2 +
-                               $w_hip      * abs($hip[$kk]      - $user_info->get_member(HIP      )) ** 2 +
-                               $w_rise     * abs($rise[$kk]     - $user_info->get_member(RISE     )) ** 2 ;       
+
+         $hamming_distance  =  $w_waist    * ($waist[$kk]    - $user_info->get_member(WAIST    )) ** 2 +
+                               $w_thigh    * ($thigh[$kk]    - $user_info->get_member(THIGH    )) ** 2 +
+                               $w_inseam   * ($inseam[$kk]   - $user_info->get_member(INSEAM   )) ** 2 +
+                               $w_outseam  * ($outseam[$kk]  - $user_info->get_member(OUTSEAM  )) ** 2 +
+                               $w_leg_open * ($leg_open[$kk] - $user_info->get_member(LEG_OPEN )) ** 2 +
+                               $w_hip      * ($hip[$kk]      - $user_info->get_member(HIP      )) ** 2 +
+                               $w_rise     * ($rise[$kk]     - $user_info->get_member(RISE     )) ** 2 ;
         
-       $figureofmerit[$kk] = $userfigureofmerit + $sign * $hamming_distance;
+       $figureofmerit[$kk] = $userfigureofmerit + $sign * ($hamming_distance + $price_w * $price[$kk]);
 
     }
 
@@ -338,6 +349,7 @@ function CreateBlob4Js($Alldata, $figureMerit, $bestfit_idx, $userpricemax, $use
     $brand  = array_column($Alldata, "brand");    
     $link   = array_column($Alldata, "web_link");
 
+    
     for($kk = 0; $kk < $M - 1; $kk++) {
         $isbest = false;
         for($kx = 0; $kx < $N; $kx++) {
@@ -392,8 +404,10 @@ $user_info   = new user;
 $user_info   = estimatealluserparams($userwaist, $userthigh, $userinseam, $useroutseam, $userstyle);
 $Alldata     = fetchdata();
 $bestfit_idx = solveLS($Alldata, $user_info, $userpricemin, $userpricemax, NUM_BEST_FIT);
-$figureMerit = calculateFigureofMerit($Alldata, $user_info);
+$figureMerit = calculateFigureofMerit($Alldata, $user_info, $userpricemin, $userpricemax);
 $DataBlob    = CreateBlob4Js($Alldata, $figureMerit, $bestfit_idx, $userpricemax, $userpricemin, $username);
+
+
 echo json_encode($DataBlob);
 
 

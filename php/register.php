@@ -1,14 +1,14 @@
 
 <?php
 
-define(DBG, true);
+define("DBG", false);
 
 
 function fetchuserdata() {
 
-        $servername  = "shalver.cdfycegg5axy.us-west-1.rds.amazonaws.com";
+        $servername  = "127.0.0.1";
         $loginname   = "root";
-        $password    = "Asghar22";
+        $password    = "@Brcm123";
         $dbname      = "Shalver";
         $tablename   = "Users";
         // Create connection
@@ -26,7 +26,7 @@ function fetchuserdata() {
 
         if ($result->num_rows > 0 and DBG) {
             // output data of each row
-            echo "data retrieved successfully";
+            echo "this is test: data retrieved successfully";
         } elseif(DBG) {
             echo "0 results";
         }
@@ -69,9 +69,9 @@ function checknames($usersInfo, $username, $useremail) {
 
 function register_user($firstname, $useremail) {
     
-    $servername = "shalver.cdfycegg5axy.us-west-1.rds.amazonaws.com";
+    $servername = "127.0.0.1";
     $username   = "root";
-    $password   = "Asghar22";
+    $password   = "@Brcm123";
     $dbname     = "Shalver";
     $tablename  = "Users";
 

@@ -195,10 +195,9 @@ function submitlogin() {
     
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-		console.log(this);
-//		var Response = JSON.parse(this.response);
-/*		if(Response.flag == true) {
+    if (this.readyState == 4 && this.status == 200) {
+		var Response = JSON.parse(this.response);
+		if(Response.flag == true) {
 		    transit2greeting();
 		    loadusermeasurements(Response);
 		    unlockTheTool();
@@ -211,8 +210,7 @@ function submitlogin() {
 			". Let's get started :)";
 		    unlockTheTool();
 		}
-*/
-	    }
+    }
 	};
 	xmlhttp.open("POST", "php/register.php", true);
 	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -562,10 +560,9 @@ function submituserdata() {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-	    data = JSON.parse(this.response);
-	    console.log(data);
-	    plot(data);
-	    presentResults(data);
+              data = JSON.parse(this.response);
+              plot(data);
+              presentResults(data);
         }
     };
 
